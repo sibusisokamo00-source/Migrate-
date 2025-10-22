@@ -1,3 +1,4 @@
+import StatusMonitor from '../../components/StatusMonitor'
 import VPSControls from '../../components/VPSControls'
 'use client'
 import { useAuth } from '../../context/AuthContext'
