@@ -1,23 +1,35 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
   const router = useRouter()
+  const { login } = useAuth()
   const [role, setRole] = useState('client')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Simple redirect based on role (for now)
-    if (role === 'client') {
-      router.push('/client/dashboard')
-    } else if (role === 'mentor') {
-      router.push('/mentor/dashboard')
-    } else if (role === 'admin') {
-      router.push('/admin/dashboard')
-    }
+    setIsLoading(true)
+    
+    // Simulate API call
+    setTimeout(() => {
+      login(email, password, role)
+      
+      // Redirect based on role
+      if (role === 'client') {
+        router.push('/client/dashboard')
+      } else if (role === 'mentor') {
+        router.push('/mentor/dashboard')
+      } else if (role === 'admin') {
+        router.push('/admin/dashboard')
+      }
+      
+      setIsLoading(false)
+    }, 1000)
   }
 
   return (
@@ -146,19 +158,20 @@ export default function Login() {
             {/* Submit Button */}
             <button
               type="submit"
+              disabled={isLoading}
               style={{
                 width: '100%',
-                backgroundColor: '#2563eb',
+                backgroundColor: isLoading ? '#9ca3af' : '#2563eb',
                 color: 'white',
                 padding: '0.75rem',
                 borderRadius: '0.375rem',
                 border: 'none',
                 fontSize: '1rem',
                 fontWeight: '500',
-                cursor: 'pointer'
+                cursor: isLoading ? 'not-allowed' : 'pointer'
               }}
             >
-              Sign in
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
           </form>
         </div>
