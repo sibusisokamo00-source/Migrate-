@@ -1,4 +1,25 @@
+'use client'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+
 export default function Login() {
+  const router = useRouter()
+  const [role, setRole] = useState('client')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Simple redirect based on role (for now)
+    if (role === 'client') {
+      router.push('/client/dashboard')
+    } else if (role === 'mentor') {
+      router.push('/mentor/dashboard')
+    } else if (role === 'admin') {
+      router.push('/admin/dashboard')
+    }
+  }
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -35,7 +56,7 @@ export default function Login() {
           borderRadius: '0.5rem',
           boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
         }}>
-          <form style={{
+          <form onSubmit={handleSubmit} style={{
             display: 'flex',
             flexDirection: 'column',
             gap: '1.5rem'
@@ -51,13 +72,17 @@ export default function Login() {
               }}>
                 I am a:
               </label>
-              <select style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '0.375rem',
-                fontSize: '1rem'
-              }}>
+              <select 
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.375rem',
+                  fontSize: '1rem'
+                }}
+              >
                 <option value="client">Client</option>
                 <option value="mentor">Mentor</option>
                 <option value="admin">Admin</option>
@@ -77,6 +102,8 @@ export default function Login() {
               </label>
               <input 
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 style={{
                   width: '100%',
@@ -102,6 +129,8 @@ export default function Login() {
               </label>
               <input 
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 style={{
                   width: '100%',
